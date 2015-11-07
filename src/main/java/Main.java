@@ -7,6 +7,7 @@ public class Main {
 
     public static void main(String[] args) {
         // start client or server for debugging
+        //TODO: youtube-dl.exe vervangen voor een .py versie zodat ook linux werkt
 
         Start start = new Start();
 

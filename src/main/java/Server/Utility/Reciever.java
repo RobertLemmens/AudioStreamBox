@@ -42,7 +42,7 @@ public class Reciever implements Runnable {
         while(isRunning){
             String text = input.next();
             controller.downloadSong(text); //TODO: song meta verzamelen, adden in playlist. Logica verzinnen om 1 voor 1 naar ALLE clients die connecten te senden.
-            try {
+            try {                               //TODO: de downloader een aparte thread maken zodat je kan blijven adden, processen parallel laten lopen
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
