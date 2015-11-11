@@ -1,5 +1,6 @@
 package Client.Views;
 
+import Client.Controllers.ClientController;
 import Standard.AbstractView;
 
 /**
@@ -10,7 +11,9 @@ public class PlaylistPanel  extends AbstractView{
     // place right
 
     // recieve playlist from the server (urls to download, order to place them in)
+    public PlaylistPanel(ClientController controller){
 
+    }
     @Override
     public void update() {
 

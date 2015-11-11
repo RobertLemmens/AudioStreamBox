@@ -1,5 +1,6 @@
 package Server.Controllers;
 
+import Server.Utility.Connection;
 import Server.Utility.Downloader;
 import Server.Utility.Reciever;
 import Standard.AbstractController;
@@ -13,14 +14,17 @@ public class ServerController extends AbstractController{
 
     private Downloader downloader;
     private Reciever reciever;
+    private Connection connection;
 
     public ServerController() {
         downloader = new Downloader(this);
         reciever = new Reciever(this);
+        connection = new Connection();
     }
 
     public void startListeningForInput(){
         reciever.start();
+        connection.startAcceptingClients();
     }
 
     public void downloadSong(String url){

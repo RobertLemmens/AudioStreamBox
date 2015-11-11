@@ -1,7 +1,5 @@
 package Client.Views;
 
-import Standard.APP;
-
 import javax.swing.*;
 
 /**
@@ -9,7 +7,7 @@ import javax.swing.*;
  */
 public class MainFrame extends JFrame{
 
-    private final String APP_TITLE = APP.TITLE.getText();
+    private final String APP_TITLE = "Youtube syncbox";
 
     public MainFrame() {
 
