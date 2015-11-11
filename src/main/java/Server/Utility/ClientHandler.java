@@ -29,10 +29,12 @@ public class ClientHandler implements Runnable {
         }
 
         while(true){ // lees en schrijf data
-            System.out.println("Server listening for input....");
+            System.out.println("Server listening for input from " + socket.getInetAddress().getHostName());
             int x = 0;
             try {
+                System.out.println("Trying to read an int...");
                 x = in.readInt();
+                System.out.println("Recieved something from the client!");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -42,10 +44,14 @@ public class ClientHandler implements Runnable {
                     // return songlist
                     try {
                         System.out.println(socket.getInetAddress().getHostName() + " Requested songlist");
-                        out.writeUTF("Hallo, jij bent: " + socket.getInetAddress().getHostName());
+                        String s = "Hallo, jij bent: " + socket.getInetAddress().getHostName();
+                        byte[] data = s.getBytes("UTF-8");
+                        out.writeInt(data.length);
+                        out.write(data);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    break;
                 }
                 case 1: {
                     // return current song
@@ -55,6 +61,7 @@ public class ClientHandler implements Runnable {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    break;
                 }
                 case 2: {
                     // return current time in song
@@ -64,6 +71,19 @@ public class ClientHandler implements Runnable {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    break;
+                }
+                default: {
+                    System.out.println("Invalid request");
+                    String s = "Invalid request";
+                    try {
+                        byte[] data = s.getBytes("UTF-8");
+                        out.writeInt(data.length);
+                        out.write(data);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                 }
             }
         }

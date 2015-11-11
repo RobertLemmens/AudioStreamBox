@@ -1,16 +1,23 @@
 package Client;
 
+import Client.Controllers.ClientController;
+
 /**
  * Created by rober on 1-11-2015.
  */
 public class Start {
-    // initiate controllers
 
-    // initiate models
+    ClientController controller = new ClientController();
 
-    // initiate views
+    public Start() {
+        controller.initComponents();
+        controller.createConnection();
+    }
 
-    // start client
+    public static void main(String[] args){
+        Start start = new Start();
+    }
+
 }
 
 

@@ -2,9 +2,11 @@ package Client.Controllers;
 
 import Client.Utility.Connection;
 import Client.Views.*;
+import Standard.APP_VAR;
 import Standard.AbstractController;
 import Standard.AbstractView;
 
+import javax.swing.*;
 import java.io.IOException;
 
 /**
@@ -20,15 +22,28 @@ public class ClientController extends AbstractController {
     private Connection connection;
 
     public ClientController() {
-        connection = new Connection(this);
+
     }
 
     public void initComponents(){
         frame = new MainFrame();
+        frame.setSize(400,200);
+        frame.setTitle(APP_VAR.APP_TITLE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         panel = new MainPanel();
         controlPanel = new ControlPanel(this);
+        controlPanel.initComponents();
         playingPanel = new PlayingPanel(this);
         playlistPanel = new PlaylistPanel(this);
+
+
+        frame.add(controlPanel);
+        frame.setVisible(true);
+    }
+
+    public void createConnection(){
+        connection = new Connection(this);
     }
 
     public void transmitRequestToServer(int choice){
@@ -37,8 +52,12 @@ public class ClientController extends AbstractController {
 
     public String retrieveSonglist() {
         String s = "";
+        int length;
         try {
-            s = connection.listener().readUTF();
+            length = connection.listener().readInt();
+            byte[] data = new byte[length];
+            connection.listener().readFully(data);
+            s = new String(data, "UTF-8");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -59,6 +78,20 @@ public class ClientController extends AbstractController {
         double s = 0.0;
         try {
             s = connection.listener().readDouble();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return s;
+    }
+
+    public String returnInvalid() {
+        String s = "";
+        int length;
+        try {
+            length = connection.listener().readInt();
+            byte[] data = new byte[length];
+            connection.listener().readFully(data);
+            s = new String(data, "UTF-8");
         } catch (IOException e) {
             e.printStackTrace();
         }

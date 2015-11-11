@@ -14,7 +14,7 @@ import java.net.Socket;
 public class Connection{
 
     private Socket socket;
-    private String host_ip = "127.0.0.1";
+    private String host_ip = "192.168.178.6";
 
     DataInputStream in;
     DataOutputStream out;
@@ -52,6 +52,8 @@ public class Connection{
 
         try {
             out.writeInt(number);
+            out.flush();
+            System.out.println("Transmitted number to server!");
         } catch (IOException e) {
             System.out.println("Something went wrong while transmitting the number");
             e.printStackTrace();

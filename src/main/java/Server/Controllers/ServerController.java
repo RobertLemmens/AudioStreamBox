@@ -23,7 +23,7 @@ public class ServerController extends AbstractController{
     }
 
     public void startListeningForInput(){
-        reciever.start();
+        //reciever.start();
         connection.startAcceptingClients();
     }
 

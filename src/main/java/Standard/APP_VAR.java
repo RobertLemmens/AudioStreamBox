@@ -6,5 +6,6 @@ package Standard;
 public class APP_VAR {
 
     public static final int PORT_NUMER = 8000;
+    public static final String APP_TITLE = "Youtube sync";
 
 }
