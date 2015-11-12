@@ -2,7 +2,6 @@ package Server.Controllers;
 
 import Server.Utility.Connection;
 import Server.Utility.Downloader;
-import Server.Utility.Reciever;
 import Standard.AbstractController;
 
 /**
@@ -10,25 +9,22 @@ import Standard.AbstractController;
  */
 public class ServerController extends AbstractController{
 
-    public static final String WORKING_DIR = "C:\\Users\\Robert\\IdeaProjects\\AudioStreamBox\\src\\downloadsTest";
+
 
     private Downloader downloader;
-    private Reciever reciever;
     private Connection connection;
 
     public ServerController() {
         downloader = new Downloader(this);
-        reciever = new Reciever(this);
-        connection = new Connection();
+        connection = new Connection(this);
     }
 
     public void startListeningForInput(){
-        //reciever.start();
         connection.startAcceptingClients();
     }
 
-    public void downloadSong(String url){
-        downloader.startDownload(url, WORKING_DIR);
+    public void addSong(String url){
+        downloader.addUrl(url);
     }
 
 

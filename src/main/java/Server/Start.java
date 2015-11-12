@@ -1,12 +1,6 @@
 package Server;
 
 import Server.Controllers.ServerController;
-import Server.Utility.Downloader;
-import Server.Utility.Reciever;
-
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * Created by rober on 1-11-2015.

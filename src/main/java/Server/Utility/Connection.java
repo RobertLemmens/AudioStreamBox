@@ -1,5 +1,6 @@
 package Server.Utility;
 
+import Server.Controllers.ServerController;
 import Standard.APP_VAR;
 import com.sun.deploy.util.SessionState;
 
@@ -25,7 +26,10 @@ public class Connection implements Runnable{
 
     public static int Clients = 0;
 
-    public Connection() {
+    private ServerController controller;
+
+    public Connection(ServerController controller) {
+        this.controller = controller;
         try {
             serverSocket = new ServerSocket(APP_VAR.PORT_NUMER);
             sockets = new ArrayList<>();
@@ -47,7 +51,7 @@ public class Connection implements Runnable{
             InetAddress inetAddress = socket.getInetAddress();
             clientList.add(inetAddress.getHostName() + "---" + inetAddress.getHostAddress());
             sockets.add(socket);
-            ClientHandler task = new ClientHandler(socket);
+            ClientHandler task = new ClientHandler(socket, controller);
 
             new Thread(task).start(); // start thread voor deze client
 

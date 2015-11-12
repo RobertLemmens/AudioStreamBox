@@ -7,5 +7,6 @@ public class APP_VAR {
 
     public static final int PORT_NUMER = 8000;
     public static final String APP_TITLE = "Youtube sync";
+    public static final String WORKING_DIR = "C:\\Users\\Robert\\IdeaProjects\\AudioStreamBox\\src\\downloadsTest";
 
 }

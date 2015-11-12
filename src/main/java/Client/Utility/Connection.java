@@ -6,6 +6,7 @@ import Standard.APP_VAR;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 
 /**
@@ -29,6 +30,19 @@ public class Connection{
             System.out.println("Something went wrong creating the socket. Is the host available?");
             e.printStackTrace();
         }
+
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+
+            public void run() {
+                try {
+                    System.out.println("Socket closing");
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }));
+        transmitNumber(100);
     }
 
     public DataInputStream listener(){
@@ -58,6 +72,23 @@ public class Connection{
             System.out.println("Something went wrong while transmitting the number");
             e.printStackTrace();
         }
+    }
+
+    public void transmitUrl(String url) {
+        byte[] data = new byte[0];
+        try {
+            data = url.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        try {
+            out = new DataOutputStream(socket.getOutputStream());
+            out.writeInt(data.length);
+            out.write(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 

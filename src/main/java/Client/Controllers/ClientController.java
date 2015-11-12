@@ -50,6 +50,11 @@ public class ClientController extends AbstractController {
         connection.transmitNumber(choice);
     }
 
+    public void transmitUrlToServer(String url){
+        connection.transmitUrl(url);
+    }
+
+
     public String retrieveSonglist() {
         String s = "";
         int length;

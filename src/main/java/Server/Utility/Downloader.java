@@ -1,6 +1,7 @@
 package Server.Utility;
 
 import Server.Controllers.ServerController;
+import Standard.APP_VAR;
 import com.github.axet.vget.VGet;
 
 import java.io.BufferedReader;
@@ -10,22 +11,38 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.spec.ECField;
+import java.util.ArrayList;
 
 /**
  * Created by rober on 1-11-2015.
  */
 
 
-public class Downloader {
+public class Downloader implements Runnable{
+
+    private ArrayList<String> urlList;
+    private ArrayList<String> downloadedUrls;
+    private Thread thread;
+    private boolean isRunning = true;
 
     public Downloader(ServerController controller){
         System.out.println("Entering constructor of downloader");
+        urlList = new ArrayList<>();
+        downloadedUrls = new ArrayList<>();
+        isRunning = true;
+        thread = new Thread(this);
+        thread.start(); // start looking for downloads
+    }
+
+    public void addUrl(String s) {
+        urlList.add(s);
     }
 
     public void startDownload(String url, String path) {
         try {
+            urlList.remove(0);
             // eerst command, dan null, dan de directory waar de cmd opent(hier download youtube-dl automatisch al zijn bestanden.
-            Process p = Runtime.getRuntime().exec("cmd /c C:\\Users\\Robert\\IdeaProjects\\AudioStreamBox\\src\\downloadsTest\\youtube-dl.exe "+url, null, new File(path)); //TODO: relative maken
+            Process p = Runtime.getRuntime().exec("cmd /c C:\\Users\\Robert\\IdeaProjects\\AudioStreamBox\\src\\downloadsTest\\youtube-dl.exe "+"--extract-audio --audio-format mp3 "+url, null, new File(path)); //TODO: relative maken
 
             BufferedReader stdInput = new BufferedReader(new
                     InputStreamReader(p.getInputStream()));
@@ -50,6 +67,25 @@ public class Downloader {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+
+    @Override
+    public void run() {
+        // check een arraylist met songs( in de controller? of via de factory. Zit er iets nieuws in, download deze dan.
+        while(isRunning){
+            if(urlList.size() < 1){
+                System.out.println("Nothing do download for me");
+            } else {
+                // download iets
+                startDownload(urlList.get(0), APP_VAR.WORKING_DIR);
+            }
+            try {
+                thread.sleep(1000); // check elke seconde voor nieuwe urls
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

@@ -19,6 +19,7 @@ public class ControlPanel extends AbstractView implements ActionListener{
     private ClientController controller;
 
     private JButton playPause;
+    private JButton sendUrl;
     private JButton next;
     private JButton previous;
     private JSlider volumeSlider;
@@ -35,6 +36,9 @@ public class ControlPanel extends AbstractView implements ActionListener{
         testArea = new JTextArea();
         testArea.setPreferredSize(new Dimension(200,100));
 
+        sendUrl = new JButton("Add");
+        sendUrl.addActionListener(this);
+
         playPause = new JButton("test"); // set image icons
         playPause.addActionListener(this);
         next = new JButton("Next");
@@ -42,6 +46,8 @@ public class ControlPanel extends AbstractView implements ActionListener{
         volumeSlider = new JSlider();
 
         add(testArea);
+        add(sendUrl);
+
         add(playPause);
         add(next);
         add(previous);
@@ -59,20 +65,10 @@ public class ControlPanel extends AbstractView implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        int s = 0;
-        if(e.getSource().equals(playPause)){
+        if(e.getSource().equals(sendUrl)){
             System.out.println("test button pressed");
-            s = Integer.parseInt(testArea.getText());
-            controller.transmitRequestToServer(s);
-        }
-        if(s == 0) {
-            testArea.setText(controller.retrieveSonglist());
-        } else if( s == 1) {
-           testArea.setText("" + controller.returnCurrentSong());
-        } else if( s == 2) {
-            testArea.setText("" + controller.retrieveTimeInSong());
-        } else {
-            testArea.setText("" + controller.returnInvalid());
+            controller.transmitRequestToServer(1000);
+            controller.transmitUrlToServer(testArea.getText());
         }
     }
 }
