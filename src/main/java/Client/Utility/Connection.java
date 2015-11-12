@@ -15,7 +15,7 @@ import java.net.Socket;
 public class Connection{
 
     private Socket socket;
-    private String host_ip = "192.168.178.6";
+    private String host_ip = "83.86.188.41";
 
     DataInputStream in;
     DataOutputStream out;
