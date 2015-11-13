@@ -1,12 +1,14 @@
 package Client.Controllers;
 
 import Client.Utility.Connection;
+import Client.Utility.MP3Retriever;
 import Client.Views.*;
 import Standard.APP_VAR;
 import Standard.AbstractController;
 import Standard.AbstractView;
 
 import javax.swing.*;
+import java.io.DataInputStream;
 import java.io.IOException;
 
 /**
@@ -20,6 +22,8 @@ public class ClientController extends AbstractController {
     private PlayingPanel playingPanel;
     private PlaylistPanel playlistPanel;
     private Connection connection;
+    private MP3Retriever mp3Retriever;
+
 
     public ClientController() {
 
@@ -36,7 +40,7 @@ public class ClientController extends AbstractController {
         controlPanel.initComponents();
         playingPanel = new PlayingPanel(this);
         playlistPanel = new PlaylistPanel(this);
-
+        mp3Retriever = new MP3Retriever(this);
 
         frame.add(controlPanel);
         frame.setVisible(true);
@@ -44,6 +48,11 @@ public class ClientController extends AbstractController {
 
     public void createConnection(){
         connection = new Connection(this);
+        getMP3filesFromServer();
+    }
+
+    public void getMP3filesFromServer() {
+        mp3Retriever.getMP3Files();
     }
 
     public void transmitRequestToServer(int choice){
@@ -54,6 +63,19 @@ public class ClientController extends AbstractController {
         connection.transmitUrl(url);
     }
 
+    public int retrieveAmountOfSongs() {
+        int s = 0;
+        try {
+            s = connection.listener().readInt();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return s;
+    }
+
+    public DataInputStream connectionListener() {
+        return connection.listener();
+    }
 
     public String retrieveSonglist() {
         String s = "";

@@ -1,11 +1,12 @@
 package Server.Utility;
 
 import Server.Controllers.ServerController;
+import Standard.APP_VAR;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.util.ArrayList;
 
 /**
  * Created by Robert on 11-Nov-15.
@@ -36,6 +37,11 @@ public class ClientHandler implements Runnable {
 
         while(isRunning){ // lees en schrijf data
             System.out.println("Server listening for input from " + socket.getInetAddress().getHostName());
+
+           // ClientUploader loader = new ClientUploader(controller, socket);
+            //Thread t = new Thread(loader);
+           // t.start();
+
             int x = 0;
             try {
                 System.out.println("Trying to read an int...");
@@ -45,11 +51,16 @@ public class ClientHandler implements Runnable {
                 isRunning = false; // stop verbinding als dit niet lukt
                 try {
                     socket.close(); // close socket
+                    Thread.yield();
+
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
                 e.printStackTrace();
             }
+
+
+
 
             switch(x){
                 case 0: {
@@ -121,7 +132,88 @@ public class ClientHandler implements Runnable {
                     break;
                 }
                 case 100: {
-                    System.out.println("Starting a thread that will download the songs to the client"); //<-- not needed denk ik nu......
+                    System.out.println("request download van de songs"); //<-- deze is goed.
+
+                    // check voor files in de folder // TEST CODE HIERONDER
+
+                    File folder = new File(APP_VAR.WORKING_DIR);
+                    File[] listOfFiles = folder.listFiles();
+
+                    ArrayList<File> fileList = new ArrayList<>();
+
+                    for(int i = 0; i < listOfFiles.length; i++) {
+                        if(listOfFiles[i].isFile()) {
+                            if(listOfFiles[i].getName().equals("youtube-dl.exe")) {
+                                System.out.println("YOUTUBE DL GEVONDEN");
+                            } else {
+                                fileList.add(listOfFiles[i]); // dit is een song
+                                System.out.println("File: " + listOfFiles[i].getName());
+                            }
+                        } else if(listOfFiles[i].isDirectory()) {
+                            System.out.println("Directory: " + listOfFiles[i].getName());
+                        }
+                    }
+                    try {
+                        out.writeInt(fileList.size());
+                        System.out.println("Sended the client the amount of numbers in the playlist");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
+
+
+
+
+                    for(int i = 0; i < fileList.size(); i++) { // we verwachten dat de client nu songs gaat opvragen om te downloaden
+                        int s;
+                        try {
+                            s = in.readInt(); // lees welke file nodig is.
+                            if(s == 999) {
+                                System.out.println("The client told us he is up to date and needs no songs");
+                                break;
+                            } else {
+                                RandomAccessFile f = new RandomAccessFile(fileList.get(s).getAbsolutePath(), "r"); // r staat voor READ deze file. je kan ook W meegeven voor write.
+                                byte[] data = new byte[(int) f.length()];
+                                f.read(data); // creeer de byte array van de file.
+                                System.out.println("Created a data byte with methode 2, file: " + fileList.get(s).getAbsolutePath());
+                                System.out.println("byte information; Length: " + data.length);
+                                out.writeInt(data.length);
+                                out.write(data);
+                            }
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+
+
+                    }
+
+                    ///////// METHOD 2 ////////////////
+                    /*
+                    try {
+                        RandomAccessFile f = new RandomAccessFile(listOfFiles[1].getAbsolutePath(), "r"); // r staat voor READ deze file. je kan ook W meegeven voor write.
+                        byte[] data = new byte[(int)f.length()];
+                        f.read(data); // creeer de byte array van de file.
+                        System.out.println("Created a data byte with methode 2, file: " + listOfFiles[0].getAbsolutePath());
+                        System.out.println("byte information; Length: " + data.length );
+                        out.writeInt(data.length);
+                        out.write(data);
+
+
+
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    */
+                    /////////// METHOD 2 WERKT;
+
+
+                    // EINDE TEST CODE
+
                     break;
                 }
                 default: {

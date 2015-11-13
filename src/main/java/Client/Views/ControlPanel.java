@@ -41,6 +41,7 @@ public class ControlPanel extends AbstractView implements ActionListener{
 
         playPause = new JButton("test"); // set image icons
         playPause.addActionListener(this);
+
         next = new JButton("Next");
         previous = new JButton("Previous");
         volumeSlider = new JSlider();
@@ -69,6 +70,10 @@ public class ControlPanel extends AbstractView implements ActionListener{
             System.out.println("test button pressed");
             controller.transmitRequestToServer(1000);
             controller.transmitUrlToServer(testArea.getText());
+        }
+        else if(e.getSource().equals(playPause)){
+            System.out.println("Requesting songs, and downloading if we need some");
+            controller.getMP3filesFromServer();
         }
     }
 }

@@ -3,10 +3,7 @@ package Client.Utility;
 import Client.Controllers.ClientController;
 import Standard.APP_VAR;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.Socket;
 
 /**
@@ -42,8 +39,11 @@ public class Connection{
                 }
             }
         }));
-        transmitNumber(100);
+
+        //transmitNumber(100); // after transmitting 100, listen for file downloads
+        //retrieveOneMP3File(); // accepteerd succesvol 1 mp3!
     }
+
 
     public DataInputStream listener(){
         try {
