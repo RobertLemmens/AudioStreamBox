@@ -1,5 +1,5 @@
  AudioStreamBox
- ===============
+===============
 Listen to the same songs as your friends by syncing audio playback. 
 
 ## How does it work
