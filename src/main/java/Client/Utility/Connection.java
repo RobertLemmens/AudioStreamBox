@@ -29,7 +29,7 @@ public class Connection{
         }
 
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-
+            // doe dit zodra de applicatie afsuit //TODO: CO
             public void run() {
                 try {
                     System.out.println("Socket closing");
@@ -38,10 +38,8 @@ public class Connection{
                     e.printStackTrace();
                 }
             }
-        }));
+        })); // close socket zodra client afsluit
 
-        //transmitNumber(100); // after transmitting 100, listen for file downloads
-        //retrieveOneMP3File(); // accepteerd succesvol 1 mp3!
     }
 
 
