@@ -22,7 +22,7 @@ public class MP3Retriever {
     }
 
     public void getMP3Files() {
-        controller.transmitRequestToServer(100);
+        controller.transmitRequestToServer(APP_VAR.REQUEST_SONG_DOWNLOAD);
         int amountOfSongs = controller.retrieveAmountOfSongs();
         System.out.println("Server responded it has " + amountOfSongs + " in its playlist");
         boolean sendExitCommand = false;
@@ -32,12 +32,13 @@ public class MP3Retriever {
                                                                                 // de client en server hebben alleen in het begin een even loop, en als de song counts gelijk zijn dan gaat de client niet eens de loop in. Dus alle andere gevallen is deze true;
         if(currentAmountOfMp3s == amountOfSongs){
             System.out.println("We are up to date! Letting the server know we need nothing");
-            controller.transmitRequestToServer(999);
+            controller.transmitRequestToServer(APP_VAR.REQUEST_NOTHING);
             controller.setUpdating(false);
         } else {
             System.out.println("The server responded with " +  amountOfSongs +", we have " + (amountOfSongs - currentAmountOfMp3s) + " songs to download");
-            System.out.println("Starting the loop, server should be ready for requests");
-            controller.setUpdating(true);
+            System.out.println("Starting the loop, server should be ready for requests"); //TODO: Kijken of de server ECHT klaar is voor requests
+            controller.setUpdating(true);                                                   // TODO: een socketmodel ontwerpen zodat het nooit kapot gaat. (ook die dubbel loop is slecht.
+                                                                                                //TODO; Dubbel loop vervangen voor 1 loop in de client side, die blijft requesten.
             for(int i = currentAmountOfMp3s; i < amountOfSongs; i++) { // loop en get de songs.
                 System.out.println("Ik ga nu: " + (amountOfSongs-currentAmountOfMp3s) +" keer loopen");
                 controller.transmitRequestToServer(i);
@@ -53,7 +54,6 @@ public class MP3Retriever {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
 
                 ////// get the mp3 file
                 int mp3Length;
@@ -71,14 +71,11 @@ public class MP3Retriever {
                 controller.addSong(mp3Name); // voeg de mp3 naam toe zodat we deze in de view kunnen adden
             }
             if(sendExitCommand){
-                controller.transmitRequestToServer(999); // stuur het exit command als nodig is.
+                controller.transmitRequestToServer(APP_VAR.REQUEST_NOTHING); // stuur het exit command als nodig is.
             }
             currentAmountOfMp3s = amountOfSongs;
             controller.setUpdating(false);
             System.out.println("Retrieved all files from the server!");
         }
-
-
     }
-
 }

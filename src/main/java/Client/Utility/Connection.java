@@ -12,7 +12,7 @@ import java.net.Socket;
 public class Connection{
 
     private Socket socket;
-    private String host_ip = "83.86.188.41";
+    private String host_ip = APP_VAR.HOST_IP;
 
     DataInputStream in;
     DataOutputStream out;
@@ -43,7 +43,7 @@ public class Connection{
     }
 
 
-    public DataInputStream listener(){
+    public DataInputStream listener(){ // returned het inputkanaal. hierop komt alles wat de server stuurt binnen
         try {
             in = new DataInputStream(socket.getInputStream());
         } catch (IOException e) {
@@ -54,7 +54,7 @@ public class Connection{
         return in;
     }
 
-    public void transmitNumber(int number) {
+    public void transmitNumber(int number) { // wordt gebruikt om de server dingen te requesten.
         try {
             out = new DataOutputStream(socket.getOutputStream());
         } catch (IOException e) {
@@ -65,7 +65,7 @@ public class Connection{
         try {
             out.writeInt(number);
             out.flush();
-            System.out.println("Transmitted number to server!");
+            System.out.println("Transmitted number " +  number  + " to server!");
         } catch (IOException e) {
             System.out.println("Something went wrong while transmitting the number");
             e.printStackTrace();

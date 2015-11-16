@@ -20,4 +20,11 @@ public class MP3AdvancedPlayer {
         }
     }
 
+    public void start() {
+        try {
+            player.play();
+        } catch (JavaLayerException e) {
+            e.printStackTrace();
+        }
+    }
 }

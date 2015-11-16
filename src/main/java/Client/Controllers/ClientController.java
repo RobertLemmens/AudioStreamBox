@@ -130,7 +130,7 @@ public class ClientController extends AbstractController {
 
     public int retrieveAmountOfSongs() {
         int s = 0;
-        try {
+        try { //TODO waar de f komt die 15 vandaan, de server stuurt echt maar 0;
             s = connection.listener().readInt();
         } catch (IOException e) {
             e.printStackTrace();

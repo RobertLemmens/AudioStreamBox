@@ -14,8 +14,8 @@ public class PlaylistPanel  extends AbstractView{
     // place right
     private ClientController controller;
 
-    private DefaultListModel model;
-    private JList playlist;
+    private DefaultListModel<String> model;
+    private JList<String> playlist;
     private JScrollPane scrollPane;
     // recieve playlist from the server (urls to download, order to place them in)
     public PlaylistPanel(ClientController controller){
@@ -24,18 +24,18 @@ public class PlaylistPanel  extends AbstractView{
     }
 
     public void initComponents() {
-        model = new DefaultListModel();
-        update();
-        playlist = new JList(model);
+        model = new DefaultListModel<String>();
+        playlist = new JList<String>(model);
         playlist.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         playlist.setSelectionForeground(Color.blue);
         scrollPane = new JScrollPane(playlist);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         add(scrollPane, BorderLayout.CENTER); // anders resized the scrollpane niet mee (zonder borderlayout center)
+        update();// ALS IETS BREAKT 19:45 DAN IS DIT DE OORZAAK
     }
 
     public String getSelectedItem(){
-        return (String) playlist.getSelectedValue();
+        return playlist.getSelectedValue();
     }
 
     public int getSelectedIndex() {
@@ -52,6 +52,8 @@ public class PlaylistPanel  extends AbstractView{
         for(String s : controller.getSongNames()) {
             model.addElement(s);
         }
+        playlist.validate();
+        playlist.repaint();
     }
 
     @Override

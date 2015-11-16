@@ -115,7 +115,7 @@ public class ControlPanel extends AbstractView implements ActionListener{
                 if(urlToSend == null ) {
                     System.out.println("No url was provided.");
                 } else {
-                    controller.transmitRequestToServer(1000); // transmit number to server to prepare for URL
+                    controller.transmitRequestToServer(APP_VAR.REQUEST_URL_DOWNLOAD); // transmit number to server to prepare for URL
                     controller.transmitUrlToServer(urlToSend);
                 }
             }
@@ -150,7 +150,6 @@ public class ControlPanel extends AbstractView implements ActionListener{
                     controller.startSong();
                 }
             }
-
 
             else if(e.getSource().equals(next)){
                 System.out.println("Skipping to the next song");
