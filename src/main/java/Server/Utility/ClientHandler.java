@@ -224,9 +224,13 @@ public class ClientHandler implements Runnable {
                     }
                     break;
                 }
+                case APP_VAR.REQUEST_NOTHING: { /// TODO: Zodra er 0 keer looped by song download request, zal dat blok nooit de 999 onvtangen en komt hij hier terecht.
+                    System.out.println("Client requested nothing, sending nothing back.");
+                    break;
+                }
                 default: {
                     System.out.println("Invalid request");
-                    String s = "Invalid request";
+                    String s = "Invalid request"; //TODO: Socket model bedenken zodat er nooit waardes op de in en out lijn blijven hangen. Kan andere requests conflicte,
                     try {
                         byte[] data = s.getBytes("UTF-8");
                         out.writeInt(data.length);

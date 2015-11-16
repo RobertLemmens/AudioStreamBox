@@ -42,7 +42,7 @@ public class Downloader implements Runnable{
         try {
             urlList.remove(0);
             // eerst command, dan null, dan de directory waar de cmd opent(hier download youtube-dl automatisch al zijn bestanden.
-            Process p = Runtime.getRuntime().exec("cmd /c C:\\Users\\Robert\\IdeaProjects\\AudioStreamBox\\src\\downloadsTest\\youtube-dl.exe "+"--extract-audio --audio-format mp3 "+url, null, new File(path)); //TODO: relative maken
+            Process p = Runtime.getRuntime().exec("cmd /c "+  APP_VAR.WORKING_DIR +"\\youtube-dl.exe "+"--extract-audio --audio-format mp3 "+url, null, new File(path)); //TODO: relative maken
 
             BufferedReader stdInput = new BufferedReader(new
                     InputStreamReader(p.getInputStream()));

@@ -7,13 +7,9 @@ import Client.Utility.MP3Retriever;
 import Client.Views.*;
 import Standard.APP_VAR;
 import Standard.AbstractController;
-import Standard.AbstractView;
-import javazoom.jl.decoder.JavaLayerException;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.io.*;
 import java.util.ArrayList;
 
