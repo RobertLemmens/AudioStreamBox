@@ -152,13 +152,19 @@ public class ControlPanel extends AbstractView implements ActionListener{
             }
 
             else if(e.getSource().equals(next)){
-                System.out.println("Skipping to the next song");
-                controller.nextSong();
+                //System.out.println("Skipping to the next song");
+                //controller.nextSong();
+
+                System.out.println("Test purpose, pausing");
+                controller.pauseSong();
             }
 
             else if(e.getSource().equals(previous)){
-                System.out.println("Previous song");
-                controller.previousSong();
+                //System.out.println("Previous song");
+                //controller.previousSong();
+
+                System.out.println("Testing purpose, resuming");
+                controller.resumeSong();
             }
 
         }

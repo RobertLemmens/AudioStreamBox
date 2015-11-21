@@ -1,9 +1,6 @@
 package Client.Controllers;
 
-import Client.Utility.Connection;
-import Client.Utility.MP3Agent;
-import Client.Utility.MP3Player;
-import Client.Utility.MP3Retriever;
+import Client.Utility.*;
 import Client.Views.*;
 import Standard.APP_VAR;
 import Standard.AbstractController;
@@ -24,8 +21,14 @@ public class ClientController extends AbstractController {
     private PlayingPanel playingPanel;
     private PlaylistPanel playlistPanel;
     private Connection connection;
+    private Heartbeat heartbeat;
     private MP3Retriever mp3Retriever;
     private boolean updating = false;
+
+    //testing
+    MP3AdvancedPlayer advancedPlayer;
+
+
     private MP3Player player;
     private int nowPlayingIndex;
     private MP3Agent songAgent;
@@ -57,6 +60,8 @@ public class ClientController extends AbstractController {
                 System.out.println("DIR created");
             }
         }
+
+        heartbeat = new Heartbeat(this);
 
     }
 
@@ -97,6 +102,7 @@ public class ClientController extends AbstractController {
         frame.setVisible(true);
 
         songAgent = new MP3Agent(this);
+        advancedPlayer = new MP3AdvancedPlayer();
     }
 
     public boolean amIUpdating(){
@@ -110,6 +116,8 @@ public class ClientController extends AbstractController {
     public void createConnection(){
         connection = new Connection(this);
         getMP3filesFromServer();
+        Thread t = new Thread(heartbeat);
+        t.start();
     }
 
     public void getMP3filesFromServer() {
@@ -191,9 +199,15 @@ public class ClientController extends AbstractController {
 
         try {
             FileInputStream input = new FileInputStream(APP_VAR.CLIENT_WORKING_DIR+playlistPanel.getSelectedItem());
-            player = new MP3Player(input);
 
-            player.play();
+            //if(advancedPlayer == null)
+            //    advancedPlayer = new MP3AdvancedPlayer(input); //TODO: niet elke keer een nieuwe advancedplayer maken. Dit gaat fout. maak een methode die input accept en gebruik die.
+
+            //advancedPlayer.createPlayer(APP_VAR.CLIENT_WORKING_DIR+playlistPanel.getSelectedItem());
+            //player = new MP3Player(input);
+            advancedPlayer.play(APP_VAR.CLIENT_WORKING_DIR+playlistPanel.getSelectedItem());
+
+            //player.play();
             controlPanel.changeToPauseIcon();
             songAgent.start();
         } catch (FileNotFoundException e1) {
@@ -205,16 +219,19 @@ public class ClientController extends AbstractController {
 
     public void startSong(String song){
 
-        if(player !=null){
+        if(player !=null){  // TODO: onderstaand bericht klopt niet, kan kennelijk nogsteeds nummer skippen omdat playback op finished komt om een of andere reden
             player.pause();// momenteel de enige manier. anders kan de thread een nummer skippen omdat close en stop de value van playback op FINISHED zetten. Nog naar kijktn
           //  player = null;
         }
-
+        System.out.println("TWEEDE STARTSONG INVOKED");
         try {
             FileInputStream input = new FileInputStream(APP_VAR.CLIENT_WORKING_DIR+song);
-            player = new MP3Player(input);
+            //player = new MP3Player(input);
 
-            player.play();
+            //player.play();
+           // advancedPlayer.createPlayer(APP_VAR.CLIENT_WORKING_DIR+playlistPanel.getSelectedItem());
+           // advancedPlayer.start();
+
             controlPanel.changeToPauseIcon();
             songAgent.start();
         } catch (FileNotFoundException e1) {
@@ -236,7 +253,7 @@ public class ClientController extends AbstractController {
     }
 
     public void resumeSong() {
-        player.resume();
+        advancedPlayer.resume();
         controlPanel.changeToPauseIcon();
     }
 
@@ -275,7 +292,8 @@ public class ClientController extends AbstractController {
     }
 
     public void pauseSong() {
-        player.pause();
+        advancedPlayer.pause();
+       // player.pause();
         controlPanel.changeToPlayIcon();
         playingPanel.update();
     }

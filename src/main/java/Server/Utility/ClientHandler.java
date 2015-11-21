@@ -123,7 +123,12 @@ public class ClientHandler implements Runnable {
                     break;
                 }
                 case APP_VAR.REQUEST_HEARTBEAT: {// heartbeat functie. Return iets simpels
-
+                    System.out.println("Heartbeating");
+                    try {
+                        out.writeInt(APP_VAR.REQUEST_HEARTBEAT);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 }
                 case APP_VAR.REQUEST_URL_DOWNLOAD: { // als client 1000 stuurt kunnen we hierna een url verwachten. lees deze in
@@ -230,7 +235,7 @@ public class ClientHandler implements Runnable {
                 }
                 default: {
                     System.out.println("Invalid request");
-                    String s = "Invalid request"; //TODO: Socket model bedenken zodat er nooit waardes op de in en out lijn blijven hangen. Kan andere requests conflicte,
+                    String s = "Invalid request"; //TODO: Socket model bedenken zodat er nooit waardes op de in en out lijn blijven hangen. Kan andere requests conflicten
                     try {
                         byte[] data = s.getBytes("UTF-8");
                         out.writeInt(data.length);
